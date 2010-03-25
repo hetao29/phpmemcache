@@ -136,7 +136,7 @@ class MemServer{
 	}
 	private static function getServer($key){
 		$key_md5 = md5($key);
-		$ordvalue =hexdec( substr($key_md5,0,3 ))%100;
+		$ordvalue =hexdec( substr($key_md5,0,3 ))%1000;
 		$memcache_id = floor($ordvalue/(1000/count(self::$_servers)));
 		return $memcache_id;
 	}
