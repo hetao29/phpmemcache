@@ -10,7 +10,7 @@ final class CacheObject{
 		$this->t = time();
 	}
 }
-class MemServer{
+class PhpMemcache{
 	static private $_connects	=	array();
 	static private $_data		=	array();
 	static private $_servers	=	array();
@@ -143,27 +143,27 @@ class MemServer{
 }
 /*test case*/
 /*
-MemServer::addServer("10.10.221.12",10006);
-MemServer::addServer("10.10.221.12",11211);
-MemServer::addServer("10.10.221.12",10001);
-MemServer::set("key1","value1",10000);
-MemServer::set("key2","value2",10000);
-MemServer::set("key3","value3",10000);
-MemServer::set("key4","value4",10000);
-MemServer::set("key5","value5",10000);
-MemServer::set("key6","value6",10000);
-MemServer::set("key7","value7",10000);
-echo "key1:".(MemServer::get("key1"))."\n";
-echo "key2:".(MemServer::get("key2"))."\n";
+PhpMemcache::addServer("10.10.221.12",10006);
+PhpMemcache::addServer("10.10.221.12",11211);
+PhpMemcache::addServer("10.10.221.12",10001);
+PhpMemcache::set("key1","value1",10000);
+PhpMemcache::set("key2","value2",10000);
+PhpMemcache::set("key3","value3",10000);
+PhpMemcache::set("key4","value4",10000);
+PhpMemcache::set("key5","value5",10000);
+PhpMemcache::set("key6","value6",10000);
+PhpMemcache::set("key7","value7",10000);
+echo "key1:".(PhpMemcache::get("key1"))."\n";
+echo "key2:".(PhpMemcache::get("key2"))."\n";
 echo "delete key3\n";
-MemServer::delete("key3");
-echo "key3:".(MemServer::get("key3"))."\n";
-echo "key1:".(MemServer::get("key1","key2")).",depend by key2\n";
-echo "key1:".(MemServer::get("key1","key3")).",depend by key3\n";
+PhpMemcache::delete("key3");
+echo "key3:".(PhpMemcache::get("key3"))."\n";
+echo "key1:".(PhpMemcache::get("key1","key2")).",depend by key2\n";
+echo "key1:".(PhpMemcache::get("key1","key3")).",depend by key3\n";
 echo "set localCache false\n";
-MemServer::setLocalCache(false);
-echo "key1:".(MemServer::get("key1",array("key2","key3"))).",depend by key2,key3\n";
+PhpMemcache::setLocalCache(false);
+echo "key1:".(PhpMemcache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
 echo "set mode 2\n";
-MemServer::setMode(2);
-echo "key1:".(MemServer::get("key1",array("key2","key3"))).",depend by key2,key3\n";
+PhpMemcache::setMode(2);
+echo "key1:".(PhpMemcache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
 */
