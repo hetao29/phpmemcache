@@ -1,8 +1,8 @@
 <?php
 /**
- * http://code.google.com/p/phpmemcache/
+ * http://code.google.com/p/PhpMemCache/
  */
-final class CacheObject{
+final class PhpMemCacheObject{
 	var $v; //$value
 	var $t; //$timestamp
 	function __construct($value){
@@ -10,7 +10,7 @@ final class CacheObject{
 		$this->t = time();
 	}
 }
-class PhpMemcache{
+class PhpMemCache{
 	static private $_connects	=	array();
 	static private $_data		=	array();
 	static private $_servers	=	array();
@@ -50,19 +50,19 @@ class PhpMemcache{
 			if(is_array($depKeys)) $keys =array_merge($keys,$depKeys);
 		}
 		$values = self::_get($keys);
-		if(!isset($values[$key]) || !($values[$key] instanceof CacheObject))return false;
+		if(!isset($values[$key]) || !($values[$key] instanceof PhpMemCacheObject))return false;
 		$value = $values[$key];unset($values[$key]);
 		if(!empty($depKeys)){
 			if(self::$mode==1){
 				foreach($depKeys as $depKey){
 					if(	!isset($values[$depKey]) || 
-						!($values[$depKey] instanceof CacheObject) || 
+						!($values[$depKey] instanceof PhpMemCacheObject) || 
 						$values[$depKey]->t>$value->t
 					) return false;
 				}
 			}else{
 				foreach($values as $k=>$v){
-					if(($v instanceof CacheObject) && $v->t > $value->t)return false;
+					if(($v instanceof PhpMemCacheObject) && $v->t > $value->t)return false;
 				}
 			};
 		}
@@ -88,7 +88,7 @@ class PhpMemcache{
 	 * @param int $exp
 	 */
 	static function set($key,$value,$exp){
-		$v = new CacheObject($value);
+		$v = new PhpMemCacheObject($value);
 		if(self::$localCache)self::$_data[$key]=$v;
 		$id = self::getServer($key);
 		$host=self::$_servers[$id]['host'];
@@ -117,7 +117,7 @@ class PhpMemcache{
 		$servs  = array();
 		$values = array();
 		foreach($keys as $key){
-			if(self::$localCache && isset(self::$_data[$key]) && (self::$_data[$key] instanceof CacheObject)){
+			if(self::$localCache && isset(self::$_data[$key]) && (self::$_data[$key] instanceof PhpMemCacheObject)){
 				$values[$key]=self::$_data[$key];
 			}else{
 				$id = self::getServer($key);
@@ -143,27 +143,27 @@ class PhpMemcache{
 }
 /*test case*/
 /*
-PhpMemcache::addServer("10.10.221.12",10006);
-PhpMemcache::addServer("10.10.221.12",11211);
-PhpMemcache::addServer("10.10.221.12",10001);
-PhpMemcache::set("key1","value1",10000);
-PhpMemcache::set("key2","value2",10000);
-PhpMemcache::set("key3","value3",10000);
-PhpMemcache::set("key4","value4",10000);
-PhpMemcache::set("key5","value5",10000);
-PhpMemcache::set("key6","value6",10000);
-PhpMemcache::set("key7","value7",10000);
-echo "key1:".(PhpMemcache::get("key1"))."\n";
-echo "key2:".(PhpMemcache::get("key2"))."\n";
+PhpMemCache::addServer("10.10.221.12",10006);
+PhpMemCache::addServer("10.10.221.12",11211);
+PhpMemCache::addServer("10.10.221.12",10001);
+PhpMemCache::set("key1","value1",10000);
+PhpMemCache::set("key2","value2",10000);
+PhpMemCache::set("key3","value3",10000);
+PhpMemCache::set("key4","value4",10000);
+PhpMemCache::set("key5","value5",10000);
+PhpMemCache::set("key6","value6",10000);
+PhpMemCache::set("key7","value7",10000);
+echo "key1:".(PhpMemCache::get("key1"))."\n";
+echo "key2:".(PhpMemCache::get("key2"))."\n";
 echo "delete key3\n";
-PhpMemcache::delete("key3");
-echo "key3:".(PhpMemcache::get("key3"))."\n";
-echo "key1:".(PhpMemcache::get("key1","key2")).",depend by key2\n";
-echo "key1:".(PhpMemcache::get("key1","key3")).",depend by key3\n";
+PhpMemCache::delete("key3");
+echo "key3:".(PhpMemCache::get("key3"))."\n";
+echo "key1:".(PhpMemCache::get("key1","key2")).",depend by key2\n";
+echo "key1:".(PhpMemCache::get("key1","key3")).",depend by key3\n";
 echo "set localCache false\n";
-PhpMemcache::setLocalCache(false);
-echo "key1:".(PhpMemcache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
+PhpMemCache::setLocalCache(false);
+echo "key1:".(PhpMemCache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
 echo "set mode 2\n";
-PhpMemcache::setMode(2);
-echo "key1:".(PhpMemcache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
+PhpMemCache::setMode(2);
+echo "key1:".(PhpMemCache::get("key1",array("key2","key3"))).",depend by key2,key3\n";
 */
