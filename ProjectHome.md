@@ -1,0 +1,1 @@
+move to http://code.google.com/p/slightphp/wiki/SCache
